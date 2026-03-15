@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+NC='\033[0m'
 
 words=(
   "the" "be" "to" "of" "and" "a" "in" "that" "have" "I"
@@ -43,9 +44,12 @@ run_func() {
   echo -e "\n________________________________________________________________________________________________________________________________________\nStart Typing : \n"
 
   t1=$(date +%s)
+  input_str=""
+  while IFS= read -n1 char && [[ -n "$char" ]]; do
+    input_str+="${char}"
+  done
 
-  read inp
-
+  echo $input_str
   t2=$(date +%s)
 
   del=$((t2 - t1))
@@ -64,6 +68,10 @@ run_func() {
     fi
   done
 
+  if ((non_space == 0)) || ((del == 0)); then
+    echo -e "\nACCURACY: 0%\nTOTAL TIME: 0s\nWPM: 0"
+    return
+  fi
   mult=$(($count * 100))
   acc=$(($mult / $non_space))
 
